@@ -30,8 +30,6 @@ class ArticleAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Article $article */
             $article = $form->getData();
-            $article->setAuthor($this->getUser());
-            $article->setPublishedAt(new \DateTime());
 
             $em->persist($article);
             $em->flush();
