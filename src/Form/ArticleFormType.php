@@ -48,7 +48,8 @@ class ArticleFormType extends AbstractType
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Content',
-                'help' => 'Article content'
+                'help' => 'Article content',
+                'required' => false
             ])
             ->add('author', EntityType::class, [
                 'class' => User::class,
