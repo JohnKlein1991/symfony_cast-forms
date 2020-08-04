@@ -11,6 +11,7 @@
             <th>Title</th>
             <th>Author</th>
             <th>Published?</th>
+            <th>Edit</th>
         </tr>
         </thead>
         <tbody>
@@ -20,6 +21,9 @@
                 <td>{{ article.author.email }}</td>
                 <td>
                     <span class="fa fa-{{ article.isPublished ? 'check' : 'times' }}"></span>
+                </td>
+                <td>
+                    <a href="{{ path('admin_article_edit', {id: article.id}) }}"><span class="fa fa-edit"></span></a>
                 </td>
             </tr>
         {% endfor %}
