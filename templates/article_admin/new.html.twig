@@ -4,7 +4,30 @@
     <h1>Crate a new Article</h1>
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(form) }}
+    </div>
+
+    <div>
+        <div class="col">
+            {{ form_row(form.title) }}
+        </div>
+    </div>
+    <div>
+        <div class="col">
+            {{ form_row(form.content) }}
+        </div>
+    </div>
+    <div>
+        <div class="col">
+            {{ form_row(form.author) }}
+        </div>
+    </div>
+    <div>
+        <div class="col">
+            {{ form_row(form.publishedAt) }}
+        </div>
+    </div>
 
         <button type="submit" class="btn btn-primary">Create</button>
     {{ form_end(form) }}
