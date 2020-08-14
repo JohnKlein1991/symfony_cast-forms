@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\RegisterFormType;
 use App\Security\LoginFormAuthenticator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,31 +42,41 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $formAuthenticator
+     * @param EntityManagerInterface $em
+     * @return \Symfony\Component\HttpFoundation\Response|null
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator)
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        GuardAuthenticatorHandler $guardHandler,
+        LoginFormAuthenticator $formAuthenticator,
+        EntityManagerInterface $em
+    )
     {
-        // TODO - use Symfony forms & validation
-        if ($request->isMethod('POST')) {
-            $user = new User();
-            $user->setEmail($request->request->get('email'));
-            $user->setFirstName('Mystery');
+        $form = $this->createForm(RegisterFormType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var User $user */
+            $user = $form->getData();
             $user->setPassword($passwordEncoder->encodePassword(
                 $user,
-                $request->request->get('password')
+                $form->get('password')->getData()
             ));
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $formAuthenticator,
-                'main'
-            );
+            return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('security/register.html.twig');
+        return $this->render('security/register.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }
