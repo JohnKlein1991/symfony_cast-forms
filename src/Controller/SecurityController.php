@@ -68,6 +68,7 @@ class SecurityController extends AbstractController
                 $user,
                 $form->get('password')->getData()
             ));
+            $user->agreeTerms();
 
             $em->persist($user);
             $em->flush();
