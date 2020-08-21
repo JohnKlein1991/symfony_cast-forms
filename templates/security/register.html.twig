@@ -1,5 +1,28 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme register_form _self %}
+
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div>
+        {{- form_label(form, null, {label_attr: {class: 'sr-only'}}) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block _register_form_agree_to_terms_row -%}
+<div class="checkbox mb-3">
+    <label>
+        <input type="checkbox" name="{{ full_name }}">Agree to terms
+    </label>
+</div>
+{%- endblock -%}
+
 {% block title %}Register!{% endblock %}
 
 {% block stylesheets %}
@@ -13,30 +36,23 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
+            {{ form_start(register_form, {'attr': {'class': 'form-signin'}}) }}
             <h1 class="h3 mb-3 font-weight-normal">Register</h1>
-            {{ form_start(form) }}
             <div class="my-custom-class-for-errors">
-                {{ form_errors(form) }}
+                {{ form_errors(register_form) }}
             </div>
 
+            {{ form_row(register_form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email address'}}) }}
+
+            {{ form_row(register_form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
             <div>
                 <div class="col">
-                    {{ form_row(form.email) }}
-                </div>
-            </div>
-            <div>
-                <div class="col">
-                    {{ form_row(form.password) }}
-                </div>
-            </div>
-            <div>
-                <div class="col">
-                    {{ form_row(form.agree_to_terms) }}
+                    {{ form_row(register_form.agree_to_terms) }}
                 </div>
             </div>
 
             <button type="submit" class="btn btn-primary">Register</button>
-            {{ form_end(form) }}
+            {{ form_end(register_form) }}
         </div>
     </div>
 </div>

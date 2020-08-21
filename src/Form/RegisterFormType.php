@@ -20,8 +20,15 @@ class RegisterFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, [
+                'label_attr' => [
+//                    'class' => 'sr-only'
+                ],
+            ])
             ->add('password', PasswordType::class, [
+                'label_attr' => [
+                    'class' => 'sr-only'
+                ],
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank(),
