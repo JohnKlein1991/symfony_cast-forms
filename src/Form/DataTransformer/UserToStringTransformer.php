@@ -42,6 +42,10 @@ class UserToStringTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
+        if (empty($value)) {
+            return;
+        }
+
         $user = $this->userRepository
             ->findOneBy([
                 'email' => $value

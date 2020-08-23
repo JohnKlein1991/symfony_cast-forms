@@ -24,17 +24,17 @@ class ArticleFormType extends AbstractType
     /**
      * @var UserToStringTransformer
      */
-    private $transformer;
+    private $authorTransformer;
 
     /**
      * ArticleFormType constructor.
      * @param UserRepository $userRepository
-     * @param UserToStringTransformer $transformer
+     * @param UserToStringTransformer $authorTransformer
      */
-    public function __construct(UserRepository $userRepository, UserToStringTransformer $transformer)
+    public function __construct(UserRepository $userRepository, UserToStringTransformer $authorTransformer)
     {
         $this->userRepository = $userRepository;
-        $this->transformer = $transformer;
+        $this->authorTransformer = $authorTransformer;
     }
 
     /**
@@ -55,27 +55,13 @@ class ArticleFormType extends AbstractType
                 'help' => 'Article content',
                 'required' => false
             ])
-//            ->add('author', EntityType::class, [
-//                'class' => User::class,
-//                'choice_label' => function(User $user) {
-//                    return sprintf('%s %s %s',
-//                        $user->getEmail(),
-//                        $user->getFirstName(),
-//                        $user->getTwitterUsername()
-//                    );
-//                },
-//                'choices' => $authors,
-//                'label' => 'Author',
-//                'help' => 'Article author',
-//                'required' => true
-//            ])
             ->add('author', ArticleAuthorType::class)
             ->add('publishedAt', null, [
                 'widget' => 'single_text'
             ]);
 
         $builder->get('author')
-            ->addModelTransformer($this->transformer);
+            ->addModelTransformer($this->authorTransformer);
     }
 
     /**
