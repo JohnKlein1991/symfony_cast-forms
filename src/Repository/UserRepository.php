@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -31,8 +32,23 @@ class UserRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('u')
             ->orderBy('u.email', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+    }
+
+    /**
+     * @param string $query
+     * @param int $limit
+     * @return int|mixed|string
+     */
+    public function getAllMatching(string $query, int $limit = 5)
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb
+            ->where('u.email like :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
     /*
     public function findOneBySomeField($value): ?User
