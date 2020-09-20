@@ -43,7 +43,9 @@ class ArticleFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $authors = $this->userRepository->getAllByEmailAlphabetical();
+        /** @var Article|null $article */
+        $article = $options['data'] ?? null;
+        $isEdit = !is_null($article) && $article->getId();
 
         $builder
             ->add('title', TextType::class, [
@@ -56,10 +58,16 @@ class ArticleFormType extends AbstractType
                 'required' => false,
                 'rows' => 20
             ])
-            ->add('author', ArticleAuthorType::class)
-            ->add('publishedAt', null, [
-                'widget' => 'single_text'
+            ->add('author', ArticleAuthorType::class, [
+                'disabled' => $isEdit
             ]);
+
+        if ($options['include_published_at']) {
+            $builder
+                ->add('publishedAt', null, [
+                    'widget' => 'single_text',
+                ]);
+        }
 
         $builder->get('author')
             ->addModelTransformer($this->authorTransformer);
@@ -71,7 +79,8 @@ class ArticleFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Article::class
+            'data_class' => Article::class,
+            'include_published_at' => false,
         ]);
     }
 }

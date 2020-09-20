@@ -18,11 +18,13 @@
         {{ form_row(form.author, {'attr': {'class': 'edit_article__author_email'}}) }}
     </div>
 </div>
-<div>
-    <div class="col">
-        {{ form_row(form.publishedAt) }}
+{% if form.publishedAt is defined %}
+    <div>
+        <div class="col">
+            {{ form_row(form.publishedAt) }}
+        </div>
     </div>
-</div>
+{% endif %}
 
 <button type="submit" class="btn btn-primary">{{ button_title }}</button>
 {{ form_end(form) }}
