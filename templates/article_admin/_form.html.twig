@@ -18,6 +18,26 @@
         {{ form_row(form.author, {'attr': {'class': 'edit_article__author_email'}}) }}
     </div>
 </div>
+
+<div>
+    <div class="col">
+        {{ form_row(form.location, {
+            attr: {
+                'data-specific-location-url': path('admin_article_location_select'),
+                class: 'js-article-form-location'
+            }
+        }) }}
+    </div>
+</div>
+
+{% if form.specificLocationName is defined %}
+    <div>
+        <div class="col js-specific-location-target">
+            {{ form_row(form.specificLocationName) }}
+        </div>
+    </div>
+{% endif %}
+
 {% if form.publishedAt is defined %}
     <div>
         <div class="col">

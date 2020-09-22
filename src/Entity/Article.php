@@ -77,6 +77,16 @@ class Article
     private $author;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $location;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $specificLocationName;
+
+    /**
      * Article constructor.
      */
     public function __construct()
@@ -345,5 +355,29 @@ class Article
     public function validate(ExecutionContextInterface $context, $payload)
     {
 
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?string $location): self
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function getSpecificLocationName(): ?string
+    {
+        return $this->specificLocationName;
+    }
+
+    public function setSpecificLocationName(?string $specificLocationName): self
+    {
+        $this->specificLocationName = $specificLocationName;
+
+        return $this;
     }
 }
